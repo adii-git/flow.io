@@ -1,0 +1,12 @@
+{$DOMAIN} {
+	encode zstd gzip
+	# API goes straight to FastAPI so the event stream is never buffered by the web app.
+	handle /api/* {
+		reverse_proxy backend:8000 {
+			flush_interval -1
+		}
+	}
+	handle {
+		reverse_proxy frontend:3000
+	}
+}

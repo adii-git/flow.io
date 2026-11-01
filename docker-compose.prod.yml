@@ -1,0 +1,24 @@
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+# Set DOMAIN, COOKIE_SECURE=true and ALLOWED_ORIGINS=https://<domain> in .env first.
+services:
+  backend:
+    ports: !reset []
+    restart: unless-stopped
+  worker:
+    restart: unless-stopped
+  frontend:
+    ports: !reset []
+    restart: unless-stopped
+  db:
+    restart: unless-stopped
+  redis:
+    restart: unless-stopped
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment: {DOMAIN: "${DOMAIN:?set in .env}"}
+    volumes: [./deploy/Caddyfile:/etc/caddy/Caddyfile:ro, caddydata:/data]
+    depends_on: [backend, frontend]
+volumes:
+  caddydata:

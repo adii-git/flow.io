@@ -1,0 +1,1615 @@
+
+
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+
+/* ========================================
+
+   1. GLOBAL BASE STYLES
+
+======================================== */
+
+
+:root {
+
+  color-scheme: dark;
+
+  --ink: #f4f5ef;
+
+  --muted: rgba(244, 245, 239, 0.72);
+
+  --line: rgba(255, 255, 255, 0.22);
+
+  --glass: rgba(11, 22, 23, 0.55);
+
+  --mint: #d7f5c5;
+
+}
+
+
+*,
+
+*::before,
+
+*::after {
+
+  box-sizing: border-box;
+
+}
+
+
+html {
+
+  min-height: 100%;
+
+  background: #102b2d;
+
+  scroll-behavior: smooth;
+
+}
+
+
+body {
+
+  min-height: 100vh;
+
+  margin: 0;
+
+  position: relative;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  color: var(--ink);
+
+  background: transparent;
+
+}
+
+
+::selection {
+
+  background: var(--mint);
+
+  color: #102b2d;
+
+}
+
+
+:focus-visible {
+
+  outline: 2px solid var(--mint);
+
+  outline-offset: 4px;
+
+}
+
+
+.sr-only {
+
+  position: absolute;
+
+  width: 1px;
+
+  height: 1px;
+
+  padding: 0;
+
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
+
+}
+
+
+/* ========================================
+
+   2. FIXED BACKGROUND — ALL ROUTES
+
+   Keep this behind the page during scrolling.
+
+======================================== */
+
+
+.global-scene {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  background: #102b2d;
+
+  isolation: isolate;
+
+}
+
+
+.global-scene-image,
+
+.global-scene-vignette,
+
+.global-monitor-glow,
+
+.global-monitor-flicker,
+
+.global-grass-sparkles {
+
+  position: absolute;
+
+  pointer-events: none;
+
+}
+
+
+.global-scene-image,
+
+.global-scene-vignette,
+
+.global-grass-sparkles {
+
+  inset: 0;
+
+}
+
+
+.global-scene-image {
+
+  background-image: url("/conduit-background.jpeg");
+
+  background-position: center center;
+
+  background-size: cover;
+
+  background-repeat: no-repeat;
+
+  animation: scene-breathe 28s ease-in-out infinite alternate;
+
+  will-change: transform;
+
+}
+
+
+.global-scene-vignette {
+
+  background:
+
+    linear-gradient(
+
+      90deg,
+
+      rgba(7, 20, 23, 0.45) 0%,
+
+      rgba(7, 20, 23, 0.20) 47%,
+
+      rgba(7, 20, 23, 0.03) 100%
+
+    ),
+
+    linear-gradient(
+
+      180deg,
+
+      rgba(6, 23, 27, 0.12) 0%,
+
+      transparent 32%,
+
+      rgba(5, 20, 17, 0.14) 65%,
+
+      rgba(4, 18, 16, 0.42) 100%
+
+    );
+
+}
+
+
+.global-monitor-glow {
+
+  left: 51.9%;
+
+  top: 57.4%;
+
+  width: 48px;
+
+  height: 40px;
+
+  transform: translate(-50%, -50%);
+
+  background: rgba(117, 255, 167, 0.16);
+
+  filter: blur(13px);
+
+  border-radius: 50%;
+
+  animation: monitor-glow 3.4s ease-in-out infinite;
+
+}
+
+
+.global-monitor-flicker {
+
+  left: 51.9%;
+
+  top: 57.2%;
+
+  width: 17px;
+
+  height: 12px;
+
+  transform: translate(-50%, -50%);
+
+  background: rgba(161, 255, 190, 0.18);
+
+  box-shadow: 0 0 7px 3px rgba(115, 255, 166, 0.13);
+
+  animation: screen-flicker 5.7s steps(1, end) infinite;
+
+}
+
+
+.global-grass-sparkles span {
+
+  position: absolute;
+
+  width: 2px;
+
+  height: 2px;
+
+  border-radius: 50%;
+
+  background: #fff7c7;
+
+  box-shadow: 0 0 5px 1px rgba(255, 227, 130, 0.65);
+
+  opacity: 0.12;
+
+  animation: twinkle 3.8s ease-in-out infinite;
+
+}
+
+
+/* All route content must appear above the fixed background. */
+
+
+.global-content {
+
+  position: relative;
+
+  z-index: 1;
+
+  min-height: 100vh;
+
+  background: transparent;
+
+}
+
+
+.global-content main {
+
+  background: transparent;
+
+}
+
+
+/* ========================================
+
+   3. WORKSPACE BACKGROUND SUPPORT
+
+======================================== */
+
+
+/* Shared page wrappers should not paint over the photograph. */
+
+.global-content .workspace,
+
+.global-content .workspace main,
+
+.global-content .workspace-page,
+
+.global-content .page-container {
+
+  background-color: transparent;
+
+}
+
+
+/* Optional translucent panel utilities. */
+
+.global-content .bg-panel {
+
+  background-color: rgba(11, 22, 23, 0.55);
+
+}
+
+
+.global-content .bg-input {
+
+  background-color: rgba(11, 22, 23, 0.42);
+
+}
+
+
+/* Common Tailwind dark backgrounds used by workspace layouts.
+
+   These override only the listed background utility classes. */
+
+.global-content .bg-gray-950,
+
+.global-content .bg-neutral-950,
+
+.global-content .bg-zinc-950 {
+
+  background-color: rgba(11, 22, 23, 0.58);
+
+}
+
+
+/* ========================================
+
+   4. LANDING PAGE
+
+======================================== */
+
+
+.conduit-landing {
+
+  position: relative;
+
+  isolation: isolate;
+
+  min-height: 100vh;
+
+  min-height: 100svh;
+
+  overflow: hidden;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding: 26px clamp(20px, 5vw, 76px) 20px;
+
+  background: transparent;
+
+}
+
+
+.scene,
+
+.scene-image,
+
+.scene-vignette,
+
+.grass-sparkles {
+
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+}
+
+
+.scene {
+
+  z-index: 0;
+
+  overflow: hidden;
+
+  background: transparent;
+
+}
+
+
+.scene-image {
+
+  background-image: url("/conduit-background.jpeg");
+
+  background-position: center center;
+
+  background-size: cover;
+
+  background-repeat: no-repeat;
+
+  transform: scale(1.015);
+
+  animation: scene-breathe 28s ease-in-out infinite alternate;
+
+  will-change: transform;
+
+}
+
+
+.scene-vignette {
+
+  background:
+
+    linear-gradient(
+
+      90deg,
+
+      rgba(7, 20, 23, 0.45) 0%,
+
+      rgba(7, 20, 23, 0.20) 47%,
+
+      rgba(7, 20, 23, 0.03) 100%
+
+    ),
+
+    linear-gradient(
+
+      180deg,
+
+      rgba(6, 23, 27, 0.12) 0%,
+
+      transparent 32%,
+
+      rgba(5, 20, 17, 0.14) 65%,
+
+      rgba(4, 18, 16, 0.42) 100%
+
+    );
+
+}
+
+
+.monitor-glow {
+
+  position: absolute;
+
+  left: 51.9%;
+
+  top: 57.4%;
+
+  width: clamp(22px, 3.4vw, 48px);
+
+  height: clamp(20px, 3vw, 40px);
+
+  transform: translate(-50%, -50%);
+
+  background: rgba(117, 255, 167, 0.16);
+
+  filter: blur(13px);
+
+  border-radius: 50%;
+
+  animation: monitor-glow 3.4s ease-in-out infinite;
+
+}
+
+
+.monitor-flicker {
+
+  position: absolute;
+
+  left: 51.9%;
+
+  top: 57.2%;
+
+  width: clamp(8px, 1.25vw, 17px);
+
+  height: clamp(6px, 0.85vw, 12px);
+
+  transform: translate(-50%, -50%);
+
+  background: rgba(161, 255, 190, 0.18);
+
+  box-shadow: 0 0 7px 3px rgba(115, 255, 166, 0.13);
+
+  animation: screen-flicker 5.7s steps(1, end) infinite;
+
+}
+
+
+.grass-sparkles span {
+
+  position: absolute;
+
+  width: 2px;
+
+  height: 2px;
+
+  border-radius: 50%;
+
+  background: #fff7c7;
+
+  box-shadow: 0 0 5px 1px rgba(255, 227, 130, 0.65);
+
+  opacity: 0.12;
+
+  animation: twinkle 3.8s ease-in-out infinite;
+
+}
+
+
+/* ========================================
+
+   5. HEADER AND FOOTER
+
+======================================== */
+
+
+.landing-header,
+
+.landing-footer {
+
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+}
+
+
+.wordmark {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  color: #fff;
+
+  text-decoration: none;
+
+  font-size: 20px;
+
+  font-weight: 650;
+
+  letter-spacing: -0.8px;
+
+  text-shadow: 0 1px 14px #102b2d66;
+
+}
+
+
+.wordmark-mark {
+
+  display: grid;
+
+  place-items: center;
+
+  width: 27px;
+
+  height: 27px;
+
+  border: 1px solid rgba(255, 255, 255, 0.72);
+
+  border-radius: 9px 9px 9px 3px;
+
+  font-size: 19px;
+
+  font-weight: 400;
+
+}
+
+
+.wordmark-period {
+
+  color: var(--mint);
+
+  margin-left: -8px;
+
+}
+
+
+.header-right {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 24px;
+
+  font-size: 12px;
+
+  letter-spacing: 0.04em;
+
+}
+
+
+.availability {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color: rgba(255, 255, 255, 0.82);
+
+}
+
+
+.availability i,
+
+.footer-center i {
+
+  width: 6px;
+
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--mint);
+
+  box-shadow: 0 0 12px var(--mint);
+
+  display: inline-block;
+
+}
+
+
+.sign-in {
+
+  color: #fff;
+
+  text-decoration: none;
+
+  border: 1px solid rgba(255, 255, 255, 0.34);
+
+  padding: 10px 14px;
+
+  border-radius: 999px;
+
+  background: rgba(9, 24, 25, 0.16);
+
+  backdrop-filter: blur(12px);
+
+}
+
+
+.sign-in span {
+
+  margin-left: 12px;
+
+  color: var(--mint);
+
+}
+
+
+/* ========================================
+
+   6. LANDING HERO
+
+======================================== */
+
+
+.hero-content {
+
+  position: relative;
+
+  z-index: 1;
+
+  width: min(100%, 650px);
+
+  margin: auto 0;
+
+  padding: clamp(58px, 12vh, 125px) 0
+
+    clamp(65px, 10vh, 105px);
+
+}
+
+
+.eyebrow,
+
+.examples-label,
+
+.landing-footer {
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.17em;
+
+}
+
+
+.eyebrow {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: rgba(255, 255, 255, 0.82);
+
+  margin-bottom: 24px;
+
+}
+
+
+.eyebrow-line {
+
+  width: 23px;
+
+  height: 1px;
+
+  background: var(--mint);
+
+}
+
+
+.hero-content h1 {
+
+  font-size: clamp(53px, 8.2vw, 104px);
+
+  line-height: 0.91;
+
+  letter-spacing: -0.075em;
+
+  font-weight: 500;
+
+  margin: 0;
+
+  max-width: 680px;
+
+  text-wrap: balance;
+
+  text-shadow: 0 2px 35px rgba(4, 18, 18, 0.15);
+
+}
+
+
+.hero-content h1 em {
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-weight: 400;
+
+  color: #e5efcf;
+
+  letter-spacing: -0.08em;
+
+}
+
+
+.hero-copy {
+
+  font-size: clamp(13px, 1.35vw, 16px);
+
+  line-height: 1.75;
+
+  color: rgba(255, 255, 255, 0.84);
+
+  margin: 24px 0 28px;
+
+  max-width: 430px;
+
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.18);
+
+}
+
+
+/* ========================================
+
+   7. PROMPT BOX
+
+======================================== */
+
+
+.prompt-box {
+
+  width: min(100%, 560px);
+
+  padding: 15px 15px 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.43);
+
+  border-radius: 16px;
+
+  background: rgba(9, 26, 26, 0.53);
+
+  backdrop-filter: blur(18px);
+
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.12);
+
+  transition: border-color 0.2s, background-color 0.2s;
+
+}
+
+
+.prompt-box:focus-within {
+
+  border-color: rgba(224, 247, 202, 0.88);
+
+  background: rgba(9, 26, 26, 0.64);
+
+}
+
+
+.prompt-box textarea {
+
+  display: block;
+
+  width: 100%;
+
+  min-height: 58px;
+
+  resize: vertical;
+
+  border: 0;
+
+  outline: 0;
+
+  background: transparent;
+
+  color: #fff;
+
+  font: 400 16px/1.5 Arial, Helvetica, sans-serif;
+
+  padding: 3px 2px;
+
+}
+
+
+.prompt-box textarea::placeholder {
+
+  color: rgba(255, 255, 255, 0.73);
+
+}
+
+
+.prompt-box textarea:focus-visible {
+
+  outline: 0;
+
+}
+
+
+.prompt-footer {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+
+  padding-top: 11px;
+
+}
+
+
+.prompt-hint {
+
+  font-size: 10px;
+
+  color: rgba(255, 255, 255, 0.65);
+
+}
+
+
+.prompt-footer button {
+
+  border: 0;
+
+  border-radius: 10px 10px 10px 3px;
+
+  padding: 10px 14px;
+
+  background: var(--mint);
+
+  color: #132b25;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: transform 0.2s, opacity 0.2s;
+
+}
+
+
+.prompt-footer button:hover:not(:disabled) {
+
+  transform: translateY(-1px);
+
+}
+
+
+.prompt-footer button:disabled {
+
+  opacity: 0.45;
+
+  cursor: not-allowed;
+
+}
+
+
+.prompt-footer button span {
+
+  margin-left: 12px;
+
+}
+
+
+/* ========================================
+
+   8. EXAMPLE PROMPTS
+
+======================================== */
+
+
+.examples {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 17px;
+
+  max-width: 600px;
+
+}
+
+
+.examples-label {
+
+  color: rgba(255, 255, 255, 0.64);
+
+  margin-right: 4px;
+
+  font-size: 8px;
+
+}
+
+
+.examples button {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border: 1px solid rgba(255, 255, 255, 0.22);
+
+  border-radius: 999px;
+
+  padding: 8px 10px;
+
+  background: rgba(8, 24, 23, 0.24);
+
+  color: rgba(255, 255, 255, 0.87);
+
+  font-size: 10px;
+
+  backdrop-filter: blur(8px);
+
+  cursor: pointer;
+
+  transition: background-color 0.2s, border-color 0.2s;
+
+}
+
+
+.examples button:hover {
+
+  background: rgba(8, 24, 23, 0.55);
+
+  border-color: rgba(255, 255, 255, 0.55);
+
+}
+
+
+.examples button span {
+
+  color: var(--mint);
+
+}
+
+
+/* ========================================
+
+   9. LANDING FOOTER
+
+======================================== */
+
+
+.landing-footer {
+
+  color: rgba(255, 255, 255, 0.7);
+
+  font-size: 8px;
+
+  letter-spacing: 0.15em;
+
+  gap: 12px;
+
+}
+
+
+.footer-center {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+}
+
+
+.landing-footer b {
+
+  color: var(--mint);
+
+  font-weight: 400;
+
+}
+
+
+/* ========================================
+
+   10. ANIMATIONS
+
+======================================== */
+
+
+@keyframes twinkle {
+
+  0%,
+
+  100% {
+
+    opacity: 0.08;
+
+    transform: scale(0.7);
+
+  }
+
+
+  35% {
+
+    opacity: 0.2;
+
+    transform: scale(1);
+
+  }
+
+
+  48% {
+
+    opacity: 0.9;
+
+    transform: scale(1.5);
+
+    box-shadow: 0 0 8px 2px rgba(255, 227, 130, 0.75);
+
+  }
+
+
+  64% {
+
+    opacity: 0.3;
+
+    transform: scale(0.9);
+
+  }
+
+
+  80% {
+
+    opacity: 0.65;
+
+    transform: scale(1.15);
+
+  }
+
+}
+
+
+@keyframes monitor-glow {
+
+  0%,
+
+  100% {
+
+    opacity: 0.55;
+
+    transform: translate(-50%, -50%) scale(0.85);
+
+  }
+
+
+  38% {
+
+    opacity: 0.95;
+
+    transform: translate(-50%, -50%) scale(1.14);
+
+  }
+
+
+  41% {
+
+    opacity: 0.65;
+
+  }
+
+
+  43% {
+
+    opacity: 1;
+
+  }
+
+
+  70% {
+
+    opacity: 0.72;
+
+  }
+
+}
+
+
+@keyframes screen-flicker {
+
+  0%,
+
+  17%,
+
+  19%,
+
+  52%,
+
+  53%,
+
+  54%,
+
+  100% {
+
+    opacity: 0.28;
+
+  }
+
+
+  18%,
+
+  42%,
+
+  43%,
+
+  72% {
+
+    opacity: 0.65;
+
+  }
+
+
+  42.5%,
+
+  73% {
+
+    opacity: 0.12;
+
+  }
+
+}
+
+
+@keyframes scene-breathe {
+
+  from {
+
+    transform: scale(1.015) translate3d(0, 0, 0);
+
+  }
+
+
+  to {
+
+    transform: scale(1.045) translate3d(-0.35%, 0.2%, 0);
+
+  }
+
+}
+
+
+/* ========================================
+
+   11. RESPONSIVE DESIGN
+
+======================================== */
+
+
+@media (max-width: 640px) {
+
+  .conduit-landing {
+
+    padding: 20px 18px 16px;
+
+  }
+
+
+  .scene-image,
+
+  .global-scene-image {
+
+    background-position: 54% center;
+
+  }
+
+
+  .scene-vignette,
+
+  .global-scene-vignette {
+
+    background:
+
+      linear-gradient(
+
+        90deg,
+
+        rgba(7, 20, 23, 0.47),
+
+        rgba(7, 20, 23, 0.17)
+
+      ),
+
+      linear-gradient(
+
+        180deg,
+
+        rgba(6, 23, 27, 0.1),
+
+        rgba(5, 20, 17, 0.16) 45%,
+
+        rgba(4, 18, 16, 0.58)
+
+      );
+
+  }
+
+
+  .global-monitor-glow,
+
+  .monitor-glow {
+
+    left: 55%;
+
+    top: 58%;
+
+    width: 27px;
+
+    height: 23px;
+
+  }
+
+
+  .global-monitor-flicker,
+
+  .monitor-flicker {
+
+    left: 55%;
+
+    top: 58%;
+
+  }
+
+
+  .header-right {
+
+    gap: 12px;
+
+  }
+
+
+  .availability {
+
+    font-size: 10px;
+
+  }
+
+
+  .hero-content {
+
+    padding: 64px 0 74px;
+
+  }
+
+
+  .hero-content h1 {
+
+    font-size: clamp(54px, 14vw, 80px);
+
+  }
+
+
+  .hero-copy {
+
+    max-width: 340px;
+
+    margin: 20px 0 24px;
+
+  }
+
+
+  .examples {
+
+    gap: 7px;
+
+  }
+
+
+  .examples-label {
+
+    width: 100%;
+
+    margin-bottom: 2px;
+
+  }
+
+
+  .examples button {
+
+    font-size: 9px;
+
+  }
+
+
+  .landing-footer {
+
+    font-size: 7px;
+
+    letter-spacing: 0.1em;
+
+  }
+
+
+  .footer-center {
+
+    display: none;
+
+  }
+
+}
+
+
+/* ========================================
+
+   12. REDUCED MOTION ACCESSIBILITY
+
+======================================== */
+
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+
+  *::before,
+
+  *::after {
+
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+
+    scroll-behavior: auto !important;
+
+    transition-duration: 0.01ms !important;
+
+  }
+
+}
+
+/* ========================================
+   RESPONSIVE LAYOUT — ALL ROUTES
+======================================== */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow-x: clip;
+}
+
+.global-content {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Flex and grid children must be allowed to shrink. */
+.global-content main,
+.global-content aside,
+.global-content section,
+.global-content article,
+.global-content .grid,
+.global-content .flex {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+/* Keep long generated output inside its panel. */
+.global-content pre {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word;
+  overflow-x: auto;
+  contain: inline-size;
+}
+
+.global-content pre code,
+.global-content code {
+  max-width: 100%;
+  white-space: inherit;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.global-content p,
+.global-content li,
+.global-content a,
+.global-content h1,
+.global-content h2,
+.global-content h3,
+.global-content td,
+.global-content th {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.global-content .rounded-panel {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.global-content img,
+.global-content video,
+.global-content canvas,
+.global-content svg {
+  max-width: 100%;
+}
+
+/* ========================================
+   MOTION (Phase 5 polish)
+   Every animation uses fill-mode "backwards": once it ends, no transform is left on the
+   element, so fixed-position children (the step sheet, the status bar) still position
+   against the viewport. Reduced-motion users get none of this (see section 12 + below).
+======================================== */
+
+:root {
+  --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fx-accent: var(--mint, #d7f5c5);
+}
+
+/* Page switch: each route fades and rises in once. */
+.fx-page { animation: fx-page-in 420ms var(--fx-ease) backwards; }
+@keyframes fx-page-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.995); filter: blur(4px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}
+
+/* Route progress bar: starts on link click, finishes when the new route renders. */
+.fx-progress {
+  position: fixed; inset: 0 auto auto 0; z-index: 60; height: 3px; width: 0;
+  background: linear-gradient(90deg, transparent, var(--fx-accent));
+  box-shadow: 0 0 12px var(--fx-accent); opacity: 0; pointer-events: none;
+}
+.fx-progress-loading { opacity: 1; animation: fx-progress-grow 8s var(--fx-ease) forwards; }
+.fx-progress-done { opacity: 0; width: 100%; transition: width 180ms ease, opacity 300ms ease 160ms; }
+@keyframes fx-progress-grow { 0% { width: 0; } 20% { width: 45%; } 60% { width: 75%; } 100% { width: 92%; } }
+
+/* Press feedback on every control + ripple from the click point. */
+.global-content button, .global-content a.rounded-full, .global-content summary {
+  transition: transform 140ms var(--fx-ease), box-shadow 200ms ease, border-color 200ms ease, background-color 200ms ease;
+}
+.global-content button:not(:disabled):hover { box-shadow: 0 6px 22px -10px var(--fx-accent); }
+.global-content button:not(:disabled):active, .global-content a:active { transform: scale(0.97); }
+.global-content button:focus-visible, .global-content a:focus-visible, .global-content summary:focus-visible {
+  outline: 2px solid var(--fx-accent); outline-offset: 2px;
+}
+.fx-ripple-host { position: relative; overflow: hidden; }
+.fx-ripple {
+  position: absolute; border-radius: 9999px; pointer-events: none;
+  background: radial-gradient(circle, rgba(215, 245, 197, 0.45) 0%, transparent 60%);
+  transform: scale(0); animation: fx-ripple 560ms ease-out forwards;
+}
+@keyframes fx-ripple { to { transform: scale(1); opacity: 0; } }
+
+/* Content that arrives (result, live output, step cards) rises in; children cascade. */
+.fx-rise { animation: fx-rise 460ms var(--fx-ease) backwards; }
+@keyframes fx-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.fx-stagger > * { animation: fx-rise 460ms var(--fx-ease) backwards; }
+.fx-stagger > *:nth-child(1) { animation-delay: 60ms; }
+.fx-stagger > *:nth-child(2) { animation-delay: 140ms; }
+.fx-stagger > *:nth-child(3) { animation-delay: 220ms; }
+.fx-stagger > *:nth-child(4) { animation-delay: 300ms; }
+.fx-stagger > *:nth-child(5) { animation-delay: 380ms; }
+.fx-stagger > *:nth-child(n+6) { animation-delay: 440ms; }
+
+/* Result card: a soft light sweep once it lands, so "the answer is here" reads instantly. */
+.fx-result { position: relative; animation: fx-rise 520ms var(--fx-ease) backwards; }
+.fx-result::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+  background: linear-gradient(110deg, transparent 30%, rgba(215, 245, 197, 0.14) 50%, transparent 70%);
+  background-size: 250% 100%; animation: fx-sweep 1.4s ease-out 300ms both;
+}
+@keyframes fx-sweep { from { background-position: 120% 0; } to { background-position: -120% 0; opacity: 0; } }
+
+/* Step cards: running pulses, done pops once, hover lifts. */
+.fx-step { transition: transform 200ms var(--fx-ease), box-shadow 220ms ease, border-color 300ms ease, opacity 300ms ease; }
+.fx-step:hover { transform: translateY(-2px); }
+.fx-running { animation: fx-pulse 1.6s ease-in-out infinite; }
+@keyframes fx-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(215, 245, 197, 0.0); }
+  50% { box-shadow: 0 0 0 6px rgba(215, 245, 197, 0.18); }
+}
+.fx-done { animation: fx-pop 420ms var(--fx-ease) backwards; }
+@keyframes fx-pop { 0% { transform: scale(0.97); } 60% { transform: scale(1.015); } 100% { transform: none; } }
+.fx-badge { display: inline-flex; align-items: center; gap: 0.35rem; }
+.fx-dot { width: 0.5rem; height: 0.5rem; border-radius: 9999px; background: currentColor; opacity: 0.6; }
+.fx-running .fx-dot { background: var(--fx-accent); opacity: 1; animation: fx-blink 1s ease-in-out infinite; }
+@keyframes fx-blink { 50% { opacity: 0.25; } }
+
+/* Step detail sheet: backdrop fades, panel slides in from the side (bottom on phones). */
+.fx-backdrop { animation: fx-fade 220ms ease backwards; }
+@keyframes fx-fade { from { opacity: 0; } }
+.fx-sheet { animation: fx-sheet-up 320ms var(--fx-ease) backwards; }
+@media (min-width: 768px) { .fx-sheet { animation-name: fx-sheet-side; } }
+@keyframes fx-sheet-up { from { transform: translateY(40px); opacity: 0; } }
+@keyframes fx-sheet-side { from { transform: translateX(40px); opacity: 0; } }
+
+/* Live typing cursor. */
+.fx-caret { display: inline-block; margin-left: 1px; animation: fx-blink 0.9s steps(2, start) infinite; }
+
+/* Copy confirmation. */
+.fx-ok { animation: fx-pop 360ms var(--fx-ease) backwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-page, .fx-rise, .fx-stagger > *, .fx-result, .fx-result::after, .fx-running, .fx-done,
+  .fx-backdrop, .fx-sheet, .fx-caret, .fx-progress-loading, .fx-ok { animation: none !important; }
+  .fx-step:hover, .global-content button:active, .global-content a:active { transform: none !important; }
+}
+
+/* Follow-up chat: "working" dots. */
+.fx-typing { display: inline-flex; gap: 4px; align-items: center; height: 1rem; }
+.fx-typing i { width: 6px; height: 6px; border-radius: 9999px; background: currentColor; animation: fx-dots 1.1s ease-in-out infinite; }
+.fx-typing i:nth-child(2) { animation-delay: 0.15s; }
+.fx-typing i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes fx-dots { 0%, 80%, 100% { opacity: 0.25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+@media (prefers-reduced-motion: reduce) { .fx-typing i { animation: none; opacity: 0.6; } }

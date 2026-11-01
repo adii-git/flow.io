@@ -1,0 +1,10 @@
+.env
+node_modules
+.next
+__pycache__
+.pytest_cache
+.venv/
+*.db
+*.sqlite3
+.DS_Store
+.kiro/

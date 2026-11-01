@@ -1,0 +1,42 @@
+x-backend-env: &backend-env
+  DATABASE_URL: postgresql+psycopg://conduit:${POSTGRES_PASSWORD}@db:5432/conduit
+  REDIS_URL: redis://redis:6379/0
+  SECRET_KEY: ${SECRET_KEY:?set in .env}
+  FERNET_KEY: ${FERNET_KEY:?set in .env}
+  COOKIE_SECURE: ${COOKIE_SECURE:-false}
+  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000}
+  EXECUTION_MODE: ${EXECUTION_MODE:-demo}
+  EXECUTION_BACKEND: celery
+  ADMIN_EMAILS: ${ADMIN_EMAILS:-}
+  UPLOAD_DIR: /srv/uploads
+  LOCAL_IMAGE_API_URL: ${LOCAL_IMAGE_API_URL:-}
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment: {POSTGRES_USER: conduit, POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?set in .env}", POSTGRES_DB: conduit}
+    volumes: [dbdata:/var/lib/postgresql/data]
+    healthcheck: {test: ["CMD-SHELL", "pg_isready -U conduit"], interval: 5s, retries: 10}
+  redis:
+    image: redis:7-alpine
+    healthcheck: {test: ["CMD", "redis-cli", "ping"], interval: 5s, retries: 10}
+  backend:
+    build: ./backend
+    environment: *backend-env
+    volumes: [uploads:/srv/uploads]
+    depends_on: {db: {condition: service_healthy}, redis: {condition: service_healthy}}
+    ports: ["8000:8000"]
+    healthcheck: {test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/api/health')"], interval: 10s, retries: 6}
+  worker:
+    build: ./backend
+    command: ["celery", "-A", "app.worker.celery_app", "worker", "--loglevel=info", "--concurrency=2"]
+    environment: *backend-env
+    volumes: [uploads:/srv/uploads]
+    depends_on: {backend: {condition: service_healthy}}
+  frontend:
+    build: {context: ./frontend, args: {BACKEND_URL: "http://backend:8000"}}
+    depends_on: [backend]
+    ports: ["3000:3000"]
+volumes:
+  dbdata:
+  uploads:
